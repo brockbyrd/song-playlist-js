@@ -14,7 +14,7 @@ function showSongs(songs){
     const songList = document.getElementById('songList')
     songs.forEach(song => {
         const li = document.createElement('li')
-        li.innerHTML = song.name
+        li.innerHTML = 'Name: ' + song.name + ' by ' + song.artist
         songList.appendChild(li)
     })
 }
