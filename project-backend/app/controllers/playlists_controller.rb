@@ -3,9 +3,9 @@ class PlaylistsController < ApplicationController
 
   # GET /playlists
   def index
-    @playlists = Playlist.all
+    @songs = Song.all
 
-    render json: @playlists
+    render json: @songs
   end
 
   # GET /playlists/1
