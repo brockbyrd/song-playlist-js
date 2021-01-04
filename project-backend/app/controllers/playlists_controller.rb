@@ -3,7 +3,7 @@ class PlaylistsController < ApplicationController
 
   # GET /playlists
   def index
-    @songs = Song.all
+    @songs = Playlist.all
 
     render json: @songs
   end
@@ -46,6 +46,6 @@ class PlaylistsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def playlist_params
-      params.fetch(:playlist, {})
+      params.fetch(:playlist, {}).permit(:name, songs_attributes: [:name, :artist, :genre])
     end
 end

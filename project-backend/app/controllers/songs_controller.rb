@@ -46,6 +46,6 @@ class SongsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def song_params
-      params.fetch(:song, {})
+      params.fetch(:song, :name, :artist, :genre, {})
     end
 end
