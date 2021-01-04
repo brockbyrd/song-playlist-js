@@ -1,21 +1,24 @@
-document.addEventListener('DOMContentLoaded', () => {
-    fetchPlaylist()
-})
+
+
+const BASE_URL = 'http://127.0.0.1:3001/'
 
 
 function fetchPlaylist() {
-    return fetch(BASE_URL)
+    return fetch(BASE_URL + "playlists")
         .then(response => response.json())
-        .then(data => appendSongs(data))
-        .catch(err => console.log(err))
+        .then(json => showSongs(json))
+}
+fetchPlaylist();
+
+function showSongs(songs){
+    const songList = document.getElementById('songList')
+    songs.forEach(song => {
+        const li = document.createElement('li')
+        li.innerHTML = song.name
+        songList.appendChild(li)
+    })
 }
 
-function appendSongs(data){
-    let songs = document.getElementById('songs');
-    for (let i = 0; i < data.length; i++){
-        var li = document.createElement("li");
-        li.innerHTML = 'Name: ' + data[i].name;
-        songs.appendChild(li);
-    }
-}
-
+// document.addEventListener('DOMContentLoaded', () => {
+//     fetchPlaylist()
+// })
