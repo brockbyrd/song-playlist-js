@@ -12,6 +12,23 @@
         <h1>Welcome to the Playlist of YOUR Favorite Songs!</h1>
         <h2>Songs</h2>
         <ul id='songList'></ul>
+
+        <form id="new-song" action='#' method="POST">
+            <div class="row">
+              <div class="col">
+                <input type="text" class="form-control" id="songName" placeholder="Song Name">
+              </div>
+              <div class="col">
+                <input type="text" class="form-control" id="artist" placeholder="Artist">
+              </div>
+              <div class="col">
+                <input type="text" class="form-control" id="genre" placeholder="Genre">
+              </div>
+              <div class="col">
+                <button type="submit" class="btn btn-primary mb-2">Submit</button>
+              </div>
+            </div>
+          </form>
         
         <script src="./src/index.js" async defer></script>
     </body>
