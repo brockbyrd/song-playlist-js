@@ -9,23 +9,13 @@
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-        <h1>Welcome to the Playlist of YOUR Favorite Songs!</h1>
-        <h2>Songs</h2>
-        <ul id='songList'></ul>
-
+      <h1>Welcome to the playlist creator!</h1>
         <form id="new-song" action='#' method="POST">
             <div class="row">
               <div class="col">
-                <input type="text" class="form-control" id="songName" placeholder="Song Name">
-              </div>
-              <div class="col">
-                <input type="text" class="form-control" id="artist" placeholder="Artist">
-              </div>
-              <div class="col">
-                <input type="text" class="form-control" id="genre" placeholder="Genre">
-              </div>
-              <div class="col">
-                <button type="submit" class="btn btn-primary mb-2">Submit</button>
+                <h3>Create a new playlist!</h3>
+                <label for="Playlist Name">Name of the Playlist: </label>
+                <input type="text" class="form-control" id="playlistName" placeholder="Playlist Name">
               </div>
             </div>
           </form>
