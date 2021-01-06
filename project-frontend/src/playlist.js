@@ -1,5 +1,4 @@
 const BASE_URL = 'http://127.0.0.1:3001/'
-const playlistForm = document.getElementById('new-playlist')
 const playlistList = document.getElementById('playlistList')
 
 const playlistForm = `
@@ -16,9 +15,11 @@ class Playlist {
     static newPlaylistForm(){
         let newPlaylistForm = document.getElementById('playlist-form')
         newPlaylistForm.innerHTML = `
-        <form onsubmit="createPlaylist(); return false;"> +
-        playlistForm
-        `
+        <form onsubmit="createPlaylist(); return false;">` +
+        playlistForm +
+        `<input type="submit" value="Create Playlist" >
+        </form>
+        <br> `  
     }
 }
 
@@ -27,20 +28,22 @@ function fetchPlaylists() {
         .then(response => response.json())
         .then(json => showPlaylists(json))
 }
-fetchPlaylists();
 
 function showPlaylists(data){
-    const playlistList = document.getElementById('playlistList')
-    data.forEach(playlist => {
+    const playlistList = document.getElementById('playlist-list')
+    data.forEach((playlist) => {
+        let ul = document.createElement('ul')
+        ul.className = 'playlists'
         const li = document.createElement('li')
         li.innerHTML = 'Playlist: ' + playlist.name;
-        playlistList.appendChild(li)
+        playlistList.appendChild(ul)
+        ul.appendChild(li)
     })
 }
 
 function createPlaylist(event){
     const makePlaylist = {
-        name: document.getElementById('name').value
+        name: document.getElementById('playlistName').value
     };
 
     fetch(BASE_URL + "playlists", { 
