@@ -1,4 +1,4 @@
-const BASE_URL = 'http://127.0.0.1:3001/'
+const BASE_URL = 'http://127.0.0.1:3001/playlists'
 const playlistList = document.getElementById('playlistList')
 
 const playlistForm = `
@@ -25,14 +25,18 @@ class Playlist {
 }
 
 function fetchPlaylists() {
-    return fetch(BASE_URL + "playlists")
+    return fetch(BASE_URL)
         .then(response => response.json())
-        .then(data => showPlaylists(data))
+        .then(data => {
+            showPlaylists(data)
+            addEventListeners()
+        })
 }
 
 Playlist.prototype.playlistHTML = function() {
     return `<div class="card" data-playlist-id="${this.id}">
             <strong class="playlist-name">${this.name}</strong> <br>
+            <button class="delete-playlist-button">Delete Playlist</button> <br>
             </div>
     `
 }
@@ -42,7 +46,7 @@ function createPlaylist(){
         name: document.getElementById('playlistName').value
     };
 
-    fetch(BASE_URL + "playlists", { 
+    fetch(BASE_URL, { 
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -54,6 +58,25 @@ function createPlaylist(){
         fetchPlaylists()
         Playlist.newPlaylistForm()
     });
+}
+
+function deletePlaylist(){
+    let playlistID = this.parentElement.getAttribute('data-playlist-id')
+
+    fetch(BASE_URL + `/${playlistID}`, {
+        method: 'DELETE'
+    })
+    .then(resp => resp.text())
+    .then(json => {
+        let chosenPlaylist = document.querySelector(`.card[data-playlist-id="${playlistID}"]`)
+        chosenPlaylist.remove()
+    })
+}
+
+function addEventListeners(){
+    document.querySelectorAll(".delete-playlist-button").forEach(e => {
+        e.addEventListener("click", deletePlaylist)
+    })
 }
 
 function clearPage() {
