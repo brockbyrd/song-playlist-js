@@ -9,6 +9,7 @@ const playlistForm = `
 
 class Playlist {
     constructor(data){
+        this.id = data.id
         this.name = data.name
     }
 
@@ -26,22 +27,17 @@ class Playlist {
 function fetchPlaylists() {
     return fetch(BASE_URL + "playlists")
         .then(response => response.json())
-        .then(json => showPlaylists(json))
+        .then(data => showPlaylists(data))
 }
 
-function showPlaylists(data){
-    const playlistList = document.getElementById('playlist-list')
-    data.forEach((playlist) => {
-        let ul = document.createElement('ul')
-        ul.className = 'playlists'
-        const li = document.createElement('li')
-        li.innerHTML = 'Playlist: ' + playlist.name;
-        playlistList.appendChild(ul)
-        ul.appendChild(li)
-    })
+Playlist.prototype.playlistHTML = function() {
+    return `<div class="card" data-playlist-id="${this.id}">
+            <strong class="playlist-name">${this.name}</strong> <br>
+            </div>
+    `
 }
 
-function createPlaylist(event){
+function createPlaylist(){
     const makePlaylist = {
         name: document.getElementById('playlistName').value
     };
@@ -54,8 +50,26 @@ function createPlaylist(event){
         body: JSON.stringify(makePlaylist)
     }).then(res => res.json())
     .then(playlist => {
-        showPlaylists(playlist)
-        showPlaylists()
+        clearPage()
+        fetchPlaylists()
         Playlist.newPlaylistForm()
     });
+}
+
+function clearPage() {
+    let playlistIndex = document.getElementById("playlist-list")
+    playlistIndex.innerHTML = ""
+}
+
+function showPlaylists(data){
+    let playlistList = document.getElementById('playlist-list')
+
+    data.forEach((playlist) => {
+        let newPlaylist = new Playlist(playlist)
+
+        const p = document.createElement('p')
+        p.innerHTML += newPlaylist.playlistHTML()
+
+        playlistList.appendChild(p)
+    })
 }
