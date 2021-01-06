@@ -2,6 +2,26 @@ const BASE_URL = 'http://127.0.0.1:3001/'
 const playlistForm = document.getElementById('new-playlist')
 const playlistList = document.getElementById('playlistList')
 
+const playlistForm = `
+<label>Playlist Name: </label>
+<input id="playlistName" placeholder="Name"></input>
+<input type="hidden" id="playlistId"></input>
+`
+
+class Playlist {
+    constructor(data){
+        this.name = data.name
+    }
+
+    static newPlaylistForm(){
+        let newPlaylistForm = document.getElementById('playlist-form')
+        newPlaylistForm.innerHTML = `
+        <form onsubmit="createPlaylist(); return false;"> +
+        playlistForm
+        `
+    }
+}
+
 function fetchPlaylists() {
     return fetch(BASE_URL + "playlists")
         .then(response => response.json())
@@ -19,8 +39,6 @@ function showPlaylists(data){
 }
 
 function createPlaylist(event){
-    event.preventDefault();
-
     const makePlaylist = {
         name: document.getElementById('name').value
     };
@@ -32,9 +50,9 @@ function createPlaylist(event){
         },
         body: JSON.stringify(makePlaylist)
     }).then(res => res.json())
-    .then(playlist => showPlaylists(playlist))
-    .catch(error => console.log('ERROR'))
-
+    .then(playlist => {
+        showPlaylists(playlist)
+        showPlaylists()
+        Playlist.newPlaylistForm()
+    });
 }
-
-playlistForm.addEventListener("submit", createPlaylist);
