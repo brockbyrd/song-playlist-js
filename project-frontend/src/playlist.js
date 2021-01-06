@@ -33,9 +33,20 @@ function fetchPlaylists() {
         })
 }
 
+function fetchPlaylist() {
+    let playlistID = this.parentElement.getAttribute('data-playlist-id')
+
+    return fetch(BASE_URL + `/${playlistID}`)
+        .then(response => response.json())
+        .then(data => {
+            showPlaylist(data)
+        })
+}
+
 Playlist.prototype.playlistHTML = function() {
     return `<div class="card" data-playlist-id="${this.id}">
-            <strong class="playlist-name">${this.name}</strong> <br>
+            <h3><strong class="playlist-name">${this.name}</strong></h3>
+            <button class="playlist-songs">View Songs</button>
             <button class="delete-playlist-button">Delete Playlist</button> <br>
             </div>
     `
@@ -60,6 +71,11 @@ function createPlaylist(){
     });
 }
 
+function playlistSongs(){
+    clearPage()
+    fetchPlaylist()
+}
+
 function deletePlaylist(){
     let playlistID = this.parentElement.getAttribute('data-playlist-id')
 
@@ -74,6 +90,10 @@ function deletePlaylist(){
 }
 
 function addEventListeners(){
+    document.querySelectorAll(".playlist-songs").forEach(e => {
+        e.addEventListener("click", playlistSongs)
+    })
+
     document.querySelectorAll(".delete-playlist-button").forEach(e => {
         e.addEventListener("click", deletePlaylist)
     })
@@ -95,4 +115,8 @@ function showPlaylists(data){
 
         playlistList.appendChild(p)
     })
+}
+
+function showPlaylist(data){
+    let songList = document.createElement()
 }
