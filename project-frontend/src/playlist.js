@@ -96,7 +96,7 @@ function addEventListeners(){
 }
 
 function clearPage() {
-    let playlistIndex = document.getElementById("playlist-list")
+    let playlistIndex = document.getElementById("main")
     playlistIndex.innerHTML = ""
 }
 
