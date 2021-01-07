@@ -1,27 +1,12 @@
 const SONG_URL = 'http://127.0.0.1:3001/songs'
 
-const songForm = `
-<label>Song Name: </label>
-<input id="songName" placeholder="Name"></input>
-<input type="hidden" id="songId"></input>
-`
-
 class Song{
     constructor(data){
         this.id = data.id
         this.name = data.name
         this.artist = data.artist
         this.genre = data.genre
-    }
-
-    static newSongForm(){
-        let newSongForm = document.getElementById('playlist-form')
-        newSongForm.innerHTML = `
-        <form onsubmit="createSong(); return false;">` +
-        songForm +
-        `<input type="submit" value="Create Song" >
-        </form>
-        <br> `  
+        this.playlist_id = data.playlist_id
     }
 
     playlistSongHTML = function() {

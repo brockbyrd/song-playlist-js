@@ -7,6 +7,13 @@ const playlistForm = `
 <input type="hidden" id="playlistId"></input>
 `
 
+// const songForm = `
+// <label>Song Name: </label>
+// <input id="songName" placeholder="Name"></input>
+// <input type="hidden" id="songId"></input>
+// <input type="hidden" id="${data.id}"</input>
+// `
+
 class Playlist {
     constructor(data){
         this.id = data.id
@@ -19,6 +26,19 @@ class Playlist {
         <form onsubmit="createPlaylist(); return false;">` +
         playlistForm +
         `<input type="submit" value="Create Playlist" >
+        </form>
+        <br> `  
+    }
+
+    static newSongForm(data){
+        let newSongForm = document.getElementById('main')
+        newSongForm.innerHTML += `
+        <form onsubmit="createSong(); return false;">
+        <label>Song Name: </label>
+            <input id="songName" placeholder="Name"></input>
+            <input type="hidden" id="songId"></input>
+            <input type="hidden" id="${data.id}"</input>
+        <input type="submit" value="Create Song">
         </form>
         <br> `  
     }
@@ -66,7 +86,6 @@ function createPlaylist(){
         body: JSON.stringify(makePlaylist)
     }).then(res => res.json())
     .then(playlist => {
-        clearPage()
         fetchPlaylists()
         Playlist.newPlaylistForm()
     });
@@ -115,6 +134,9 @@ function showPlaylists(data){
 
 function showPlaylist(data){
     let main = document.getElementById("main")
+    let playlistDiv = document.createElement('div')
+    playlistDiv.setAttribute("id", `${data.id}`)
+    main.appendChild(playlistDiv)
 
     data.songs.forEach((song) =>{
         let newSong = new Song(song)
@@ -123,4 +145,6 @@ function showPlaylist(data){
         p.innerHTML += newSong.playlistSongHTML()
         main.appendChild(p)
     })
+
+    Playlist.newSongForm(data.id)
 }
