@@ -8,12 +8,22 @@ class Song{
         this.genre = data.genre
     }
 
+    static newSongForm(){
+        let newSongForm = document.getElementById('playlist-form')
+        newSongForm.innerHTML = `
+        <form onsubmit="createSong(); return false;">` +
+        songForm +
+        `<input type="submit" value="Create Song" >
+        </form>
+        <br> `  
+    }
+
     playlistSongHTML = function() {
         return `<div class="card" song-id="${this.id}">
-                <h3><strong class="song-name">${this.name} by: </strong></h3>
-                <h3><strong class="song-name">${this.artist}</strong></h3>
-                <h3><strong class="song-name">${this.genre}</strong></h3>
-                <button class="delete-song-button">Delete Song</button> <br>
+                    <h3><strong class="song-name">${this.name} by: </strong></h3> 
+                    <h3><strong class="song-name">${this.artist}</strong></h3>
+                    <h3><strong class="song-name">${this.genre}</strong></h3>
+                    <button class="delete-song-button">Delete Song</button> <br>
                 </div>
         `
     }
