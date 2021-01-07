@@ -1,5 +1,11 @@
 const SONG_URL = 'http://127.0.0.1:3001/songs'
 
+const songForm = `
+<label>Song Name: </label>
+<input id="songName" placeholder="Name"></input>
+<input type="hidden" id="songId"></input>
+`
+
 class Song{
     constructor(data){
         this.id = data.id
@@ -47,6 +53,7 @@ function addSong(){
     .then(song => {
         console.log(song)
         getPlaylist()
+        Song.newSongForm()
     });
 }
 
