@@ -22,6 +22,15 @@ class Playlist {
         </form>
         <br> `  
     }
+
+    playlistHTML = function() {
+        return `<div class="card" playlist-id="${this.id}">
+                <h3><strong class="playlist-name">${this.name}</strong></h3>
+                <button class="playlist-songs">View Songs</button>
+                <button class="delete-playlist-button">Delete Playlist</button> <br>
+                </div>
+        `
+    }
 }
 
 function fetchPlaylists() {
@@ -34,22 +43,14 @@ function fetchPlaylists() {
 }
 
 function fetchPlaylist() {
-    let playlistID = this.parentElement.getAttribute('data-playlist-id')
+    let playlistID = this.parentElement.getAttribute('playlist-id')
 
     return fetch(BASE_URL + `/${playlistID}`)
         .then(response => response.json())
         .then(data => {
+            clearPage()
             showPlaylist(data)
         })
-}
-
-Playlist.prototype.playlistHTML = function() {
-    return `<div class="card" data-playlist-id="${this.id}">
-            <h3><strong class="playlist-name">${this.name}</strong></h3>
-            <button class="playlist-songs">View Songs</button>
-            <button class="delete-playlist-button">Delete Playlist</button> <br>
-            </div>
-    `
 }
 
 function createPlaylist(){
@@ -71,27 +72,22 @@ function createPlaylist(){
     });
 }
 
-function playlistSongs(){
-    clearPage()
-    fetchPlaylist()
-}
-
 function deletePlaylist(){
-    let playlistID = this.parentElement.getAttribute('data-playlist-id')
+    let playlistID = this.parentElement.getAttribute('playlist-id')
 
     fetch(BASE_URL + `/${playlistID}`, {
         method: 'DELETE'
     })
     .then(resp => resp.text())
     .then(json => {
-        let chosenPlaylist = document.querySelector(`.card[data-playlist-id="${playlistID}"]`)
+        let chosenPlaylist = document.querySelector(`.card[playlist-id="${playlistID}"]`)
         chosenPlaylist.remove()
     })
 }
 
 function addEventListeners(){
     document.querySelectorAll(".playlist-songs").forEach(e => {
-        e.addEventListener("click", playlistSongs)
+        e.addEventListener("click", fetchPlaylist)
     })
 
     document.querySelectorAll(".delete-playlist-button").forEach(e => {
@@ -118,5 +114,13 @@ function showPlaylists(data){
 }
 
 function showPlaylist(data){
-    let songList = document.createElement()
+    let main = document.getElementById("main")
+
+    data.songs.forEach((song) =>{
+        let newSong = new Song(song)
+
+        const p = document.createElement('p')
+        p.innerHTML += newSong.playlistSongHTML()
+        main.appendChild(p)
+    })
 }

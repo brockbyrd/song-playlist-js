@@ -7,6 +7,14 @@ class Song{
         this.artist = data.artist
         this.genre = data.genre
     }
+
+    playlistSongHTML = function() {
+        return `<div class="card" song-id="${this.id}">
+                <h3><strong class="song-name">${this.name}</strong></h3>
+                <button class="delete-song-button">Delete Song</button> <br>
+                </div>
+        `
+    }
 }
 
 function addSong(){
@@ -26,6 +34,7 @@ function addSong(){
     .then(resp => resp.json())
     .then(song => {
         console.log(song)
-        getSongs()
-    })
+        getPlaylist()
+    });
 }
+
