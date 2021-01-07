@@ -16,7 +16,6 @@ class SongsController < ApplicationController
   # POST /songs
   def create
     @song = Song.new(song_params)
-
     if @song.save
       render json: @song, status: :created, location: @song
     else
@@ -46,6 +45,6 @@ class SongsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def song_params
-      params.fetch(:song, :name, :artist, :genre, {})
+      params.fetch(:song, {}).permit(:name, :artist, :genre, :playlist_id)
     end
 end

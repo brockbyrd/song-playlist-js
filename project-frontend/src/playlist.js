@@ -1,4 +1,5 @@
 const BASE_URL = 'http://127.0.0.1:3001/playlists'
+const SONG_URL = 'http://127.0.0.1:3001/songs'
 const playlistList = document.getElementById('playlistList')
 
 const playlistForm = `
@@ -34,11 +35,14 @@ class Playlist {
         let newSongForm = document.getElementById('main')
         newSongForm.innerHTML += `
         <form onsubmit="createSong(); return false;">
-        <label>Song Name: </label>
-            <input id="songName" placeholder="Name"></input>
-            <input type="hidden" id="songId"></input>
-            <input type="hidden" id="${data.id}"</input>
-        <input type="submit" value="Create Song">
+                <label>Song Name: </label>
+                    <input id="songName" placeholder="Name"></input>
+                <label>Song Artist: </label>
+                    <input id="artist" placeholder="Artist"></input>
+                <label>Song Genre: </label>
+                    <input id="genre" placeholder="Genre"></input>
+                <input type="hidden" id="${data.id}"></input>
+                <input type="submit" value="Create Song">
         </form>
         <br> `  
     }
@@ -73,6 +77,8 @@ function fetchPlaylist() {
         })
 }
 
+
+
 function createPlaylist(){
     const makePlaylist = {
         name: document.getElementById('playlistName').value
@@ -89,6 +95,26 @@ function createPlaylist(){
         fetchPlaylists()
         Playlist.newPlaylistForm()
     });
+}
+
+function createSong(){
+    const makeSong = {
+        name: document.getElementById('songName').value,
+        artist: document.getElementById('artist').value,
+        genre: document.getElementById('genre').value,
+        playlist_id: document.querySelector(".help").getAttribute('id')
+    }
+
+    fetch(SONG_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(makeSong)
+    }).then(song => {
+        showPlaylist(song.playlist_id)
+        Playlist.newSongForm()
+    })
 }
 
 function deletePlaylist(){
@@ -136,6 +162,7 @@ function showPlaylist(data){
     let main = document.getElementById("main")
     let playlistDiv = document.createElement('div')
     playlistDiv.setAttribute("id", `${data.id}`)
+    playlistDiv.className = "help"
     main.appendChild(playlistDiv)
 
     data.songs.forEach((song) =>{
@@ -143,8 +170,8 @@ function showPlaylist(data){
 
         const p = document.createElement('p')
         p.innerHTML += newSong.playlistSongHTML()
-        main.appendChild(p)
+        playlistDiv.appendChild(p)
     })
 
-    Playlist.newSongForm(data.id)
+    Playlist.newSongForm(data)
 }
