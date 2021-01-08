@@ -19,26 +19,3 @@ class Song{
         `
     }
 }
-
-function addSong(){
-    const song = {
-        name: document.getElementById('name').value,
-        artist: document.getElementById('artist').value,
-        genre: document.getElementById('genre').value
-    }
-
-    fetch(SONG_URL, {
-        method: 'POST',
-        body: JSON.stringify(song),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(resp => resp.json())
-    .then(song => {
-        console.log(song)
-        getPlaylist()
-        Song.newSongForm()
-    });
-}
-

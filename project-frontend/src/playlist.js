@@ -41,7 +41,8 @@ class Playlist {
                     <input id="artist" placeholder="Artist"></input>
                 <label>Song Genre: </label>
                     <input id="genre" placeholder="Genre"></input>
-                <input type="hidden" id="${data.id}"></input>
+                    <input type="hidden" id="songID"></input>
+                <input type="hidden" id="${data}"></input>
                 <input type="submit" value="Create Song">
         </form>
         <br> `  
@@ -74,6 +75,7 @@ function fetchPlaylist() {
         .then(data => {
             clearPage()
             showPlaylist(data)
+            addEventListeners()
         })
 }
 
@@ -93,6 +95,7 @@ function createPlaylist(){
     }).then(res => res.json())
     .then(playlist => {
         fetchPlaylists()
+        clearPage()
         Playlist.newPlaylistForm()
     });
 }
@@ -111,10 +114,27 @@ function createSong(){
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(makeSong)
-    }).then(song => {
-        showPlaylist(song.playlist_id)
-        Playlist.newSongForm()
+    }).then(res => res.json())
+    .then(song => {
+        addSong(song)
+        addEventListeners()
     })
+}
+
+function addSong(song){
+    let main = document.querySelector(".help")
+    let songCard = document.createElement("div")
+    songCard.className = "card"
+    songCard.setAttribute("song-id", song.id)
+
+    songCard.innerHTML += `
+    
+    <h3> <strong class="songName">${song.name} by: </strong> </h3>
+    <h3> <strong class="artist">${song.artist} </strong> </h3>
+    <h3> <strong class="genre">${song.genre}</strong> </h3>
+    <button class="delete-song-button">Delete Song</button> <br>
+    `
+    main.appendChild(songCard)
 }
 
 function deletePlaylist(){
@@ -130,6 +150,18 @@ function deletePlaylist(){
     })
 }
 
+function deleteSong(){
+        let songId = this.parentElement.getAttribute('song-id')
+        fetch( SONG_URL + `/${songId}`, {
+            method: 'DELETE'
+          })
+          .then(resp => resp.text())
+          .then(json => {
+              let selectedEvent = document.querySelector(`.card[song-id="${songId}"]`) 
+              selectedEvent.remove()
+          })
+}
+
 function addEventListeners(){
     document.querySelectorAll(".playlist-songs").forEach(e => {
         e.addEventListener("click", fetchPlaylist)
@@ -138,10 +170,14 @@ function addEventListeners(){
     document.querySelectorAll(".delete-playlist-button").forEach(e => {
         e.addEventListener("click", deletePlaylist)
     })
+
+    document.querySelectorAll(".delete-song-button").forEach(e => {
+        e.addEventListener("click", deleteSong)
+    })
 }
 
 function clearPage() {
-    let playlistIndex = document.getElementById("main")
+    let playlistIndex = document.getElementById("playlist-list")
     playlistIndex.innerHTML = ""
 }
 
@@ -172,6 +208,6 @@ function showPlaylist(data){
         p.innerHTML += newSong.playlistSongHTML()
         playlistDiv.appendChild(p)
     })
-
-    Playlist.newSongForm(data)
+    let ID = data.id
+    Playlist.newSongForm(ID)
 }
