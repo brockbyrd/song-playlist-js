@@ -8,13 +8,6 @@ const playlistForm = `
 <input type="hidden" id="playlistId"></input>
 `
 
-// const songForm = `
-// <label>Song Name: </label>
-// <input id="songName" placeholder="Name"></input>
-// <input type="hidden" id="songId"></input>
-// <input type="hidden" id="${data.id}"</input>
-// `
-
 class Playlist {
     constructor(data){
         this.id = data.id
@@ -177,7 +170,7 @@ function addEventListeners(){
 }
 
 function clearPage() {
-    let playlistIndex = document.getElementById("playlist-list")
+    let playlistIndex = document.getElementById("main")
     playlistIndex.innerHTML = ""
 }
 
@@ -196,6 +189,12 @@ function showPlaylists(data){
 
 function showPlaylist(data){
     let main = document.getElementById("main")
+
+    let playlistName = document.createElement('h1')
+    playlistName.setAttribute('id', 'playlistname')
+    playlistName.innerHTML += data.name
+    main.appendChild(playlistName)
+
     let playlistDiv = document.createElement('div')
     playlistDiv.setAttribute("id", `${data.id}`)
     playlistDiv.className = "help"
@@ -204,7 +203,7 @@ function showPlaylist(data){
     data.songs.forEach((song) =>{
         let newSong = new Song(song)
 
-        const p = document.createElement('p')
+        const p = document.createElement('p') 
         p.innerHTML += newSong.playlistSongHTML()
         playlistDiv.appendChild(p)
     })
