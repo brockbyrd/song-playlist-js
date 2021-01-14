@@ -3,9 +3,9 @@ class PlaylistsController < ApplicationController
 
   # GET /playlists
   def index
-    @playlist = Playlist.all
+    playlist = Playlist.all
 
-    render json: @playlist
+    render json: playlist
   end
 
   # GET /playlists/1
@@ -15,12 +15,12 @@ class PlaylistsController < ApplicationController
 
   # POST /playlists
   def create
-    @playlist = Playlist.new(playlist_params)
+    playlist = Playlist.new(playlist_params)
 
-    if @playlist.save
-      render json: @playlist, status: :created, location: @playlist
+    if playlist.save
+      render json: playlist, status: :created, location: playlist
     else
-      render json: @playlist.errors, status: :unprocessable_entity
+      render json: playlist.errors, status: :unprocessable_entity
     end
   end
 
